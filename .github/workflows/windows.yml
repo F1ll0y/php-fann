@@ -7,7 +7,7 @@ jobs:
         shell: cmd
     strategy:
       matrix:
-          version: ["8.1", "8.2", "8.3"]
+          version: ["8.3"]
           arch: [x64]
           ts: [ts]
           compiler: [vs16]
@@ -26,7 +26,7 @@ jobs:
           ts: ${{matrix.ts}}
       - name: Copy dependencies
         run: |
-          xcopy deps\libfann-2.2-${{matrix.compiler}}-${{matrix.arch}}\ ..\deps\
+          xcopy deps\libfann-2.2-${{matrix.compiler}}-${{matrix.arch}}\ php-dev\deps\
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
