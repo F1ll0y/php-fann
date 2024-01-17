@@ -7,7 +7,6 @@ PHP_FANN = 'yes';
 PHP_FANN_SHARED = 'yes';
 
 if (PHP_FANN == "yes") {
-	(function () {
 		// check if zts enabled
 		if (PHP_ZTS == "no") {
 			WARNING("Parallel extension requires ZTS build of PHP on windows");
@@ -24,5 +23,4 @@ if (PHP_FANN == "yes") {
 		} else {
 			WARNING("  fann not enabled, headers or libraries not found");
 		}
-	})
 }
