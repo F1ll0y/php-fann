@@ -7,12 +7,10 @@ PHP_FANN = 'yes';
 PHP_FANN_SHARED = 'yes';
 
 if (PHP_FANN == "yes") {
-		// check if zts enabled
-		if (PHP_ZTS == "no") {
-			WARNING("Parallel extension requires ZTS build of PHP on windows");
-			return;
-		}
-		
+	// check if zts enabled
+	if (PHP_ZTS == "no") {
+		WARNING("Parallel extension requires ZTS build of PHP on windows");
+	} else {
 		if (CHECK_LIB("libfann.lib;doublefann.lib;fanndouble.lib", "fann", PHP_FANN) &&
 				CHECK_HEADER_ADD_INCLUDE("fann.h", "CFLAGS_FANN")) {
 
@@ -23,4 +21,5 @@ if (PHP_FANN == "yes") {
 		} else {
 			WARNING("  fann not enabled, headers or libraries not found");
 		}
+	}
 }
