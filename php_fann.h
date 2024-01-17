@@ -87,6 +87,10 @@ PHP_FUNCTION(fann_set_weight);
 /* Training */
 PHP_FUNCTION(fann_train);
 PHP_FUNCTION(fann_test);
+PHP_FUNCTION(fann_set_MSE_value);
+PHP_FUNCTION(fann_set_num_MSE);
+PHP_FUNCTION(fann_get_MSE_value);
+PHP_FUNCTION(fann_get_num_MSE);
 PHP_FUNCTION(fann_get_MSE);
 PHP_FUNCTION(fann_get_bit_fail);
 PHP_FUNCTION(fann_reset_MSE);
@@ -98,6 +102,10 @@ PHP_FUNCTION(fann_test_data);
 /* Training Data Manipulation */
 PHP_FUNCTION(fann_read_train_from_file);
 #if PHP_FANN_LIBFANN_VERSION_ID >= 0x020200
+PHP_FUNCTION(fann_train_epoch_batch_parallel);
+PHP_FUNCTION(fann_train_epoch_irpropm_parallel);
+PHP_FUNCTION(fann_train_epoch_quickprop_parallel);
+PHP_FUNCTION(fann_train_epoch_sarprop_parallel);
 PHP_FUNCTION(fann_create_train);
 PHP_FUNCTION(fann_create_train_from_callback);
 #endif

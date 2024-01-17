@@ -178,6 +178,24 @@ ZEND_ARG_INFO(0, input)
 ZEND_ARG_INFO(0, desired_output)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(arginfo_fann_set_MSE_value, 0)
+ZEND_ARG_INFO(0, ann)
+ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(arginfo_fann_set_num_MSE, 0)
+ZEND_ARG_INFO(0, ann)
+ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(arginfo_fann_get_MSE_value, 0)
+ZEND_ARG_INFO(0, ann)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(arginfo_fann_get_num_MSE, 0)
+ZEND_ARG_INFO(0, ann)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO(arginfo_fann_get_MSE, 0)
 ZEND_ARG_INFO(0, ann)
 ZEND_END_ARG_INFO()
@@ -221,6 +239,30 @@ ZEND_ARG_INFO(0, filename)
 ZEND_END_ARG_INFO()
 
 #if PHP_FANN_LIBFANN_VERSION_ID >= 0x020200
+ZEND_BEGIN_ARG_INFO(arginfo_fann_train_epoch_batch_parallel, 0)
+ZEND_ARG_INFO(0, ann)
+ZEND_ARG_INFO(0, data)
+ZEND_ARG_INFO(0, thread_num)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(arginfo_fann_train_epoch_irpropm_parallel, 0)
+ZEND_ARG_INFO(0, ann)
+ZEND_ARG_INFO(0, data)
+ZEND_ARG_INFO(0, thread_num)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(arginfo_fann_train_epoch_quickprop_parallel, 0)
+ZEND_ARG_INFO(0, ann)
+ZEND_ARG_INFO(0, data)
+ZEND_ARG_INFO(0, thread_num)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(arginfo_fann_train_epoch_sarprop_parallel, 0)
+ZEND_ARG_INFO(0, ann)
+ZEND_ARG_INFO(0, data)
+ZEND_ARG_INFO(0, thread_num)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO(arginfo_fann_create_train, 0)
 ZEND_ARG_INFO(0, num_data)
 ZEND_ARG_INFO(0, num_input)
@@ -781,6 +823,10 @@ zend_function_entry fann_functions[] = {
 	PHP_FE(fann_set_weight,                               arginfo_fann_set_weight)
 	PHP_FE(fann_train,                                    arginfo_fann_train)
 	PHP_FE(fann_test,                                     arginfo_fann_test)
+	PHP_FE(fann_set_MSE_value,                            arginfo_fann_set_MSE_value)
+	PHP_FE(fann_set_num_MSE,                              arginfo_fann_set_num_MSE)
+	PHP_FE(fann_get_MSE_value,                            arginfo_fann_get_MSE_value)
+	PHP_FE(fann_get_num_MSE,                              arginfo_fann_get_num_MSE)
 	PHP_FE(fann_get_MSE,                                  arginfo_fann_get_MSE)
 	PHP_FE(fann_get_bit_fail,                             arginfo_fann_get_bit_fail)
 	PHP_FE(fann_reset_MSE,                                arginfo_fann_reset_MSE)
@@ -790,6 +836,10 @@ zend_function_entry fann_functions[] = {
 	PHP_FE(fann_test_data,                                arginfo_fann_test_data)
 	PHP_FE(fann_read_train_from_file,                     arginfo_fann_read_train_from_file)
 #if PHP_FANN_LIBFANN_VERSION_ID >= 0x020200
+	PHP_FE(fann_train_epoch_batch_parallel,               arginfo_fann_train_epoch_batch_parallel)
+	PHP_FE(fann_train_epoch_irpropm_parallel,             arginfo_fann_train_epoch_irpropm_parallel)
+	PHP_FE(fann_train_epoch_quickprop_parallel,           arginfo_fann_train_epoch_quickprop_parallel)
+	PHP_FE(fann_train_epoch_sarprop_parallel,             arginfo_fann_train_epoch_sarprop_parallel)
 	PHP_FE(fann_create_train,                             arginfo_fann_create_train)
 	PHP_FE(fann_create_train_from_callback,               arginfo_fann_create_train_from_callback)
 #endif
@@ -1982,6 +2032,78 @@ PHP_FUNCTION(fann_test)
 }
 /* }}} */
 
+/* {{{ proto double fann_get_MSE_value(resource ann)
+   Reads the mean square error from the network */
+PHP_FUNCTION(fann_set_MSE_value)
+{
+	double mseValue;
+	zval *z_ann;
+	struct fann *ann;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rd", &z_ann, &mseValue) == FAILURE) {
+		return;
+	}
+	PHP_FANN_FETCH_ANN();
+	
+	ann->MSE_value = mseValue;
+	
+	RETURN_TRUE;
+}
+
+/* {{{ proto double fann_get_num_MSE(resource ann)
+   Reads the mean square error from the network */
+PHP_FUNCTION(fann_set_num_MSE)
+{
+	double numMSE;
+	zval *z_ann;
+	struct fann *ann;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rd", &z_ann, &numMSE) == FAILURE) {
+		return;
+	}
+	PHP_FANN_FETCH_ANN();
+	
+	ann->num_MSE = numMSE;
+	
+	RETURN_TRUE;
+}
+
+/* {{{ proto double fann_get_MSE_value(resource ann)
+   Reads the mean square error from the network */
+PHP_FUNCTION(fann_get_MSE_value)
+{
+	double mseValue;
+	zval *z_ann;
+	struct fann *ann;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &z_ann) == FAILURE) {
+		return;
+	}
+	PHP_FANN_FETCH_ANN();
+	
+	mseValue = ann->MSE_value;
+	
+	RETURN_DOUBLE(mseValue);
+}
+
+/* {{{ proto double fann_get_num_MSE(resource ann)
+   Reads the mean square error from the network */
+PHP_FUNCTION(fann_get_num_MSE)
+{
+	double numMSE;
+	zval *z_ann;
+	struct fann *ann;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &z_ann) == FAILURE) {
+		return;
+	}
+	PHP_FANN_FETCH_ANN();
+	
+	numMSE = ann->num_MSE;
+	
+	RETURN_DOUBLE(numMSE);
+}
+
 /* {{{ proto double fann_get_MSE(resource ann)
    Reads the mean square error from the network */
 PHP_FUNCTION(fann_get_MSE)
@@ -2027,6 +2149,119 @@ PHP_FUNCTION(fann_train_on_file)
 	fann_train_on_file(ann, filename, max_epochs, epochs_between_reports, desired_error);
 	PHP_FANN_ERROR_CHECK_ANN();
 	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool fann_train_epoch_batch_parallel(resource ann, resource data, int thread_num)
+   Trains on an entire dataset in parallel, for one epoch */
+PHP_FUNCTION(fann_train_epoch_batch_parallel)
+{
+
+	zval *z_ann, *z_train_data;
+	long thread_num;
+	double mse;
+
+	struct fann *ann;
+	struct fann_train_data *train_data;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rrl", &z_ann, &z_train_data,
+							  &thread_num) == FAILURE) {
+		return;
+	}
+	PHP_FANN_FETCH_ANN();
+	PHP_FANN_FETCH_TRAIN_DATA();
+	php_fann_update_user_data(ann, z_ann, z_train_data);
+	mse = (double) fann_train_epoch_batch_parallel(ann, train_data, thread_num);
+	PHP_FANN_ERROR_CHECK_ANN();
+	RETURN_DOUBLE(mse);
+}
+/* }}} */
+
+/* {{{ proto bool fann_train_epoch_irpropm_parallel(resource ann, resource data, int thread_num)
+   Trains on an entire dataset in parallel, for one epoch */
+PHP_FUNCTION(fann_train_epoch_irpropm_parallel)
+{
+
+	zval *z_ann, *z_train_data;
+	long thread_num;
+	double mse;
+	float mseF;
+
+	struct fann *ann;
+	struct fann_train_data *train_data;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rrl", &z_ann, &z_train_data,
+							  &thread_num) == FAILURE) {
+		return;
+	}
+	
+	PHP_FANN_FETCH_ANN();
+	
+	PHP_FANN_FETCH_TRAIN_DATA();
+	
+	php_fann_update_user_data(ann, z_ann, z_train_data);
+		
+	mse = (double)fann_train_epoch_irpropm_parallel(ann, train_data, thread_num);
+	
+	if(ann->num_MSE){
+		mse = (double)ann->MSE_value/ann->num_MSE;
+	}else{
+		mse = 0.0;
+	}
+	
+	PHP_FANN_ERROR_CHECK_ANN();
+	
+	RETURN_DOUBLE(mse);
+}
+/* }}} */
+
+/* {{{ proto bool fann_train_epoch_quickprop_parallel(resource ann, resource data, int thread_num)
+   Trains on an entire dataset in parallel, for one epoch */
+PHP_FUNCTION(fann_train_epoch_quickprop_parallel)
+{
+
+	zval *z_ann, *z_train_data;
+	long thread_num;
+	double mse;
+
+	struct fann *ann;
+	struct fann_train_data *train_data;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rrl", &z_ann, &z_train_data,
+							  &thread_num) == FAILURE) {
+		return;
+	}
+	PHP_FANN_FETCH_ANN();
+	PHP_FANN_FETCH_TRAIN_DATA();
+	php_fann_update_user_data(ann, z_ann, z_train_data);
+	mse = (double) fann_train_epoch_quickprop_parallel(ann, train_data, thread_num);
+	PHP_FANN_ERROR_CHECK_ANN();
+	RETURN_DOUBLE(mse);
+}
+/* }}} */
+
+/* {{{ proto bool fann_train_epoch_sarprop_parallel(resource ann, resource data, int thread_num)
+   Trains on an entire dataset in parallel, for one epoch */
+PHP_FUNCTION(fann_train_epoch_sarprop_parallel)
+{
+
+	zval *z_ann, *z_train_data;
+	long thread_num;
+	double mse;
+
+	struct fann *ann;
+	struct fann_train_data *train_data;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rrl", &z_ann, &z_train_data,
+							  &thread_num) == FAILURE) {
+		return;
+	}
+	PHP_FANN_FETCH_ANN();
+	PHP_FANN_FETCH_TRAIN_DATA();
+	php_fann_update_user_data(ann, z_ann, z_train_data);
+	mse = (double) fann_train_epoch_sarprop_parallel(ann, train_data, thread_num);
+	PHP_FANN_ERROR_CHECK_ANN();
+	RETURN_DOUBLE(mse);
 }
 /* }}} */
 

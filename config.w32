@@ -1,7 +1,10 @@
 // $Id$
 // vim:ft=javascript
 
-ARG_WITH("fann", "for fann support", "yes");
+ARG_WITH("fann", "for fann support", "no");
+ARG_ENABLE("fann", "for fann support", "yes");
+PHP_FANN = 'yes';
+PHP_FANN_SHARED = 'yes';
 
 if (PHP_FANN == "yes") {
 	if (CHECK_LIB("libfann.lib;doublefann.lib;fanndouble.lib", "fann", PHP_FANN) &&
@@ -12,6 +15,6 @@ if (PHP_FANN == "yes") {
 
 		EXTENSION("fann", "fann.c fann_connection.c");
 	} else {
-		WARNING("fann not enabled, headers or libraries not found");
+		WARNING("  fann not enabled, headers or libraries not found");
 	}
 }

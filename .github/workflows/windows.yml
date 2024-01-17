@@ -1,0 +1,62 @@
+name: Windows
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  build:
+    defaults:
+      run:
+        shell: cmd
+    strategy:
+      matrix:
+          version: ["8.1", "8.2", "8.3"]
+          arch: [x64]
+          ts: [ts]
+          compiler: [vs16]
+    if: ${{ success() || failure() }}
+    runs-on: windows-latest
+    name: Windows, PHP v${{matrix.version}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup PHP
+        id: setup-php
+        uses: omars44/setup-php-sdk@master
+        with:
+          version: ${{matrix.version}}
+          arch: ${{matrix.arch}}
+          ts: ${{matrix.ts}}
+      - name: Copy dependencies
+        run: |
+          xcopy deps\libfann-2.2-${{matrix.compiler}}-${{matrix.arch}}\ ..\deps\
+      - name: Enable Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{matrix.arch}}
+          toolset: ${{steps.setup-php.outputs.toolset}}
+      - name: phpize
+        run: phpize
+      - name: configure
+        run: configure --with-fann --enable-fann --enable-debug-pack --with-prefix=${{steps.setup-php.outputs.prefix}}
+      - name: make
+        run: nmake
+      - name: test
+        run: nmake test TESTS="--show-diff tests"
+        continue-on-error: true
+      - name: package
+        run: |
+          md .install
+          copy LICENSE .install
+          copy README.md .install
+          if exist x64 (
+            if exist x64\Release (set prefix=x64\Release) else set prefix=x64\Release_TS
+          ) else (
+            if exist Release (set prefix=Release) else set prefix=Release_TS
+          )
+          copy %prefix%\php_fann.dll .install
+          copy %prefix%\php_fann.pdb .install
+          copy ..\deps\COPYING .install\COPYING.PTHREADS
+          copy ..\deps\bin\* .install
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: parallel-${{matrix.version}}
+          path: .install
