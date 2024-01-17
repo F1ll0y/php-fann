@@ -26,6 +26,8 @@ jobs:
           ts: ${{matrix.ts}}
       - name: Copy dependencies
         run: |
+          dir deps\
+          dir php-dev\deps\
           xcopy deps\libfann-2.2-${{matrix.compiler}}-${{matrix.arch}}\ php-dev\deps\
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1

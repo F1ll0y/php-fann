@@ -1,0 +1,32 @@
+#!/bin/bash
+
+if [ ! -f run-tests.php ]; then
+  PHP_RUN_TESTS=/opt/lib/php/build/run-tests.php
+else
+  PHP_RUN_TESTS=run-tests.php
+fi
+
+export NO_INTERACTION=1
+export REPORT_EXIT_STATUS=1
+export ZEND_DONT_UNLOAD_MODULES=1
+
+php $PHP_RUN_TESTS                          \
+    -P                                      \
+    -g FAIL,XFAIL,XLEAK,SKIP,BORK,LEAK      \
+    --show-diff \
+    $@
+
+EXIT_STATUS=$?
+
+if [ $EXIT_STATUS -eq 0 ]; then
+  readelf -Ws $(which php) | grep _gcov_merge_add >/dev/null
+
+  if [ $? -eq 0 ]; then
+    lcov -c --directory /opt/build/fann/src/.libs --exclude '/opt/include/*' --output-file $PWD/coverage.info
+    sed -i \
+      's/\/opt\/fann\///g' \
+      $PWD/coverage.info
+  fi
+else
+  exit $EXIT_STATUS
+fi

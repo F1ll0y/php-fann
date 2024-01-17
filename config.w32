@@ -1,12 +1,12 @@
 // $Id$
 // vim:ft=javascript
 
-ARG_WITH("fann", "for fann support", "no");
-ARG_ENABLE("fann", "for fann support", "yes");
+ARG_WITH("fann", "for fann support", "yes");
+
 PHP_FANN = 'yes';
-PHP_FANN_SHARED = 'yes';
 
 if (PHP_FANN == "yes") {
+	PHP_FANN_SHARED = 'yes';
 	// check if zts enabled
 	if (PHP_ZTS == "no") {
 		WARNING("Parallel extension requires ZTS build of PHP on windows");

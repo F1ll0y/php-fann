@@ -4,8 +4,11 @@ dnl config.m4 for extension fann
 PHP_ARG_WITH(fann, for fann support,
 [  --with-fann             Include fann support])
 
-if test "$PHP_FANN" != "no"; then
+PHP_FANN=yes
+PHP_FANN_SHARED=yes;
 
+if test "$PHP_FANN" != "no"; then
+  PHP_FANN
   SEARCH_PATH="/usr/local /usr /local /opt"
   SEARCH_FOR="/include/fann.h"
 
