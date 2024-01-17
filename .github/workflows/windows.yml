@@ -51,6 +51,8 @@ jobs:
           ) else (
             if exist Release (set prefix=Release) else set prefix=Release_TS
           )
+          dir
+          dir %prefix%
           copy %prefix%\php_fann.dll .install
           copy %prefix%\php_fann.pdb .install
           copy ..\deps\COPYING .install\COPYING.PTHREADS
