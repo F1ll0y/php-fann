@@ -26,6 +26,7 @@ jobs:
           ts: ${{matrix.ts}}
       - name: Copy dependencies
         run: |
+          mkdir ..\deps
           dir deps\
           dir php-dev\
           dir ..\
