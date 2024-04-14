@@ -5,7 +5,7 @@ ARG_WITH("fann", "for fann support", "yes");
 
 PHP_FANN = 'yes';
 
-if (PHP_FANN == "yes") {
+//if (PHP_FANN == "yes") {
 	PHP_FANN_SHARED = 'yes';
 	// check if zts enabled
 	if (PHP_ZTS == "no") {
@@ -22,4 +22,4 @@ if (PHP_FANN == "yes") {
 			WARNING("  fann not enabled, headers or libraries not found");
 		}
 	}
-}
+//}
