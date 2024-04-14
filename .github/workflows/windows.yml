@@ -32,7 +32,7 @@ jobs:
           dir ..\
           echo deps\libfann-2.2-${{matrix.compiler}}-${{matrix.arch}}
           dir deps\libfann-2.2-${{matrix.compiler}}-${{matrix.arch}}\
-          xcopy deps\libfann-2.2-${{matrix.compiler}}-${{matrix.arch}}\ ..\deps\
+          xcopy /S deps\libfann-2.2-${{matrix.compiler}}-${{matrix.arch}}\ ..\deps\
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
